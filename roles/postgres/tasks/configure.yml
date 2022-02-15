@@ -1,0 +1,41 @@
+---
+- name: Configure global settings.
+  lineinfile:
+    dest: "{{ postgresql_config_path }}/postgresql.conf"
+    regexp: "^#?{{ item.option }}.+$"
+    line: "{{ item.option }} = '{{ item.value }}'"
+    state: "{{ item.state | default('present') }}"
+    mode: 0644
+  with_items: "{{ postgresql_global_config_options }}"
+  notify: restart postgresql
+
+- name: Configure host based authentication (if entries are configured).
+  template:
+    src: "pg_hba.conf.j2"
+    dest: "{{ postgresql_config_path }}/pg_hba.conf"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    mode: 0600
+  notify: restart postgresql
+  when: postgresql_hba_entries | length > 0
+
+- name: change postgres pg hba access
+  lineinfile:
+    path: /etc/postgresql/{{postgresql_version}}/main/pg_hba.conf
+    regexp: 'host  all  all 0.0.0.0/0 md5'
+    line: 'host  all  all 0.0.0.0/0 md5'
+
+- name: setup listen address and restart postgre
+  command: "{{ item }}"
+  loop:
+    - sed -e "s/[#]\?listen_addresses = .*/listen_addresses = '*'/g" -i '/etc/postgresql/{{postgresql_version}}/main/postgresql.conf'
+    - systemctl restart postgresql
+
+- name: Ensure PostgreSQL unix socket dirs exist.
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    mode: "{{ postgresql_unix_socket_directories_mode }}"
+  with_items: "{{ postgresql_unix_socket_directories }}"
