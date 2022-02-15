@@ -1,0 +1,9 @@
+[web]
+vm1 ansible_host=35.173.46.201
+
+[database]
+vm1 ansible_host=35.173.46.201
+
+[app]
+vm2 ansible_host=54.162.52.200
+vm3 ansible_host=50.16.124.78

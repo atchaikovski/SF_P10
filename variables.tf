@@ -30,11 +30,15 @@ variable "domain_tchaikovski_link" {
   default = "tchaikovski.link"
 }
 
-variable "nginx_host_name" {
+variable "ubuntu_host_name" {
   type = string
-  default = "www"
+  default = "vm"
 }
 
+variable "centos_host_name" {
+  type = string
+  default = "centos"
+}
 
 variable "az" {
   type = string
@@ -45,6 +49,10 @@ variable "public_key" {}
 
 variable "private_key" {}
 
-variable nginx_count {
+variable ubuntu_count {
+  type = number
+}
+
+variable centos_count {
   type = number
 }

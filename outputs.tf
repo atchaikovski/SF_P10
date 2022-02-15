@@ -1,11 +1,11 @@
-output "vm1_server_ip" {
-  value = aws_eip.vm1_static_ip.public_ip
+output "vm_ubuntu0_server_ip" {
+  value = aws_eip.ubuntu0_static_ip.public_ip
 }
 
-output "vm2_server_ip" {
-  value = aws_eip.vm2_static_ip.public_ip
+output "vm_ubuntu1_server_ip" {
+  value = aws_eip.ubuntu1_static_ip.public_ip
 }
 
-output "vm3_server_ip" {
-  value = aws_eip.vm3_static_ip.public_ip
+output "vm_centos_server_ip" {
+  value = aws_eip.centos0_static_ip.public_ip
 }
