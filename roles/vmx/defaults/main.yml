@@ -1,0 +1,4 @@
+---
+# defaults file for vm1
+
+task_user: ansible

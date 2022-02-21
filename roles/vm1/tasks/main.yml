@@ -1,13 +1,13 @@
 ---
 # tasks file for vm1
 
-- name: create a user {{task_user}}
+- name: create a user {{ task_user }}
   user: 
     name: "{{ task_user }}"
     shell: /bin/bash
   tags: usr
 
-- name: create ssh dir for the keys/authorized_users etc
+- name: create ssh dir for the keys/authorized_keys etc
   file: 
     path: "/home/{{ task_user }}/.ssh"
     mode: 0600
@@ -16,7 +16,35 @@
     state: directory
   tags: usr
 
-- name: Generate an ssh keypair 
-  community.crypto.openssh_keypair:
-    path: "/home/{{ task_user }}/.ssh/id_rsa"
-  tags: usr
+- name: Install ansible Redhat
+  when: ansible_os_family == "RedHat"
+  yum:
+    name: "ansible"
+    state: present
+  tags: ansible
+
+- name: Install ansible Debian
+  when: ansible_os_family == "Debian"
+  apt:
+    update_cache: yes
+    name: "ansible"
+    state: present
+  tags: ansible
+
+- name: Copy an ssh keypair main
+  copy:
+    src: "files/id_rsa"
+    dest: "/home/{{ task_user }}/.ssh/id_rsa"
+  tags: keys
+
+- name: Copy an ssh keypair public
+  copy:
+    src: "files/id_rsa.pub"
+    dest: "/home/{{ task_user }}/.ssh/id_rsa.pub"
+  tags: keys
+
+- name: create authorized_keys
+  copy:
+    src: "files/id_rsa.pub"
+    dest: "/home/{{ task_user }}/.ssh/authorized_keys"
+  tags: keys

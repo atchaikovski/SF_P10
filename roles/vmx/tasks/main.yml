@@ -1,0 +1,23 @@
+---
+# tasks file for vm1
+
+- name: create a user {{ task_user }}
+  user: 
+    name: "{{ task_user }}"
+    shell: /bin/bash
+  tags: usr
+
+- name: create ssh dir for the keys/authorized_keys etc
+  file: 
+    path: "/home/{{ task_user }}/.ssh"
+    mode: 0600
+    owner: "{{ task_user }}"
+    group: "{{ task_user }}"
+    state: directory
+  tags: usr
+
+- name: create authorized_keys
+  copy:
+    src: "files/id_rsa.pub"
+    dest: "/home/{{ task_user }}/.ssh/authorized_keys"
+  tags: keys

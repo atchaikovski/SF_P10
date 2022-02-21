@@ -42,7 +42,6 @@ resource "aws_instance" "vm_centos" {
 
 # --------- launch Ansible to deploy load on these resources ---------
 
-/*
 resource "null_resource" "null1" {
   depends_on = [
      local_file.inventory
@@ -56,7 +55,6 @@ resource "null_resource" "null1" {
      command = "ansible-playbook -i ./inventory --private-key ${var.private_key} -e 'pub_key=${var.public_key}' playbook.yml"
   }
 }
-*/
 
 # --------------- get static IP addresses ------------------
 

@@ -9,7 +9,8 @@
   connection: ssh
   roles: 
     - commons
-    - postgresql
+    - postgres
+    - vm1
 
 - hosts: app
   remote_user: centos
@@ -21,3 +22,5 @@
   roles: 
     - commons
     - docker
+    - vmx
+
