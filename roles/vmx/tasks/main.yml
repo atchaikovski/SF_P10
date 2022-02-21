@@ -1,5 +1,5 @@
 ---
-# tasks file for vm1
+# tasks file for vm2 & vm3
 
 - name: create a user {{ task_user }}
   user: 
